@@ -39,7 +39,7 @@
 ## 🚀 Quick Start
 
 ```lua
-local SertaiVNLib = loadstring(game:HttpGet("YOUR_URL/Source.luau"))()
+local SertaiVNLib = loadstring(game:HttpGet("https://github.com/SertaiVNHub/SertaiVN-Ui-Library/blob/main/Source.luau"))()
 
 local Window = SertaiVNLib:MakeWindow({
     Name = "SertaiVN Hub",
