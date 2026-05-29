@@ -5,7 +5,7 @@ local LocalPlayer = game:GetService("Players").LocalPlayer
 local Mouse = LocalPlayer:GetMouse()
 local HttpService = game:GetService("HttpService")
 
-local SertaiVNLib = {
+local SarXNightLib = {
     Elements = {},
     ThemeObjects = {},
     Connections = {},
@@ -26,66 +26,65 @@ local SertaiVNLib = {
     SaveCfg = false
 }
 
--- ============ ASSET IDs (replace with your own uploaded assets) ============
+-- ============ DEFAULT ASSET IDs ============
 local Assets = {
-    Logo = "rbxassetid://11436111346",          -- Loading screen logo
-    NotificationIcon = "rbxassetid://10709751939", -- Notification bell icon
-    ToggleIcon = "rbxassetid://10734898355",    -- Mobile toggle button icon
-    WindowIcon = "rbxassetid://11436111346",    -- Window title icon
-    CloseIcon = "rbxassetid://10747384394",     -- Close X icon
-    MinimizeIcon = "rbxassetid://10734896206",  -- Minimize dash icon
-    DropdownIcon = "rbxassetid://10709790948",  -- Dropdown arrow
-    SearchIcon = "rbxassetid://10747373144",    -- Search magnifier
-    DefaultTabIcon = "rbxassetid://10723345516",-- Default tab icon
-    Checkmark = "rbxassetid://10747384394"      -- Toggle checkmark
+    Logo = "rbxassetid://11436111346",
+    NotificationIcon = "rbxassetid://10709751939",
+    ToggleIcon = "rbxassetid://10734898355",
+    WindowIcon = "rbxassetid://11436111346",
+    CloseIcon = "rbxassetid://10747384394",
+    MinimizeIcon = "rbxassetid://10734896206",
+    DropdownIcon = "rbxassetid://10709790948",
+    SearchIcon = "rbxassetid://10747373144",
+    DefaultTabIcon = "rbxassetid://10723345516",
+    Checkmark = "rbxassetid://10747384394"
 }
 
-local SertaiVN = Instance.new("ScreenGui")
-SertaiVN.Name = "SertaiVN"
+local SarXNight = Instance.new("ScreenGui")
+SarXNight.Name = "SarXNight"
 if syn then
-    syn.protect_gui(SertaiVN)
-    SertaiVN.Parent = game.CoreGui
+    syn.protect_gui(SarXNight)
+    SarXNight.Parent = game.CoreGui
 else
-    SertaiVN.Parent = gethui and gethui() or game.CoreGui
+    SarXNight.Parent = gethui and gethui() or game.CoreGui
 end
 
 if gethui then
     for _, Interface in ipairs(gethui():GetChildren()) do
-        if Interface.Name == SertaiVN.Name and Interface ~= SertaiVN then
+        if Interface.Name == SarXNight.Name and Interface ~= SarXNight then
             Interface:Destroy()
         end
     end
 else
     for _, Interface in ipairs(game.CoreGui:GetChildren()) do
-        if Interface.Name == SertaiVN.Name and Interface ~= SertaiVN then
+        if Interface.Name == SarXNight.Name and Interface ~= SarXNight then
             Interface:Destroy()
         end
     end
 end
 
-function SertaiVNLib:IsRunning()
+function SarXNightLib:IsRunning()
     if gethui then
-        return SertaiVN.Parent == gethui()
+        return SarXNight.Parent == gethui()
     else
-        return SertaiVN.Parent == game:GetService("CoreGui")
+        return SarXNight.Parent == game:GetService("CoreGui")
     end
 end
 
 local function AddConnection(Signal, Function)
-    if not SertaiVNLib:IsRunning() then return end
+    if not SarXNightLib:IsRunning() then return end
     local SignalConnect = Signal:Connect(Function)
-    table.insert(SertaiVNLib.Connections, SignalConnect)
+    table.insert(SarXNightLib.Connections, SignalConnect)
     return SignalConnect
 end
 
 task.spawn(function()
-    while SertaiVNLib:IsRunning() do wait() end
-    for _, Connection in next, SertaiVNLib.Connections do
+    while SarXNightLib:IsRunning() do wait() end
+    for _, Connection in next, SarXNightLib.Connections do
         Connection:Disconnect()
     end
 end)
 
--- ============ FIXED DRAGGING (separates DragPoint from Target) ============
 local function AddDraggingFunctionality(DragPoint, Main)
     pcall(function()
         local Dragging, DragInput, MousePos, FramePos = false
@@ -128,11 +127,11 @@ local function Create(Name, Properties, Children)
 end
 
 local function CreateElement(ElementName, ElementFunction)
-    SertaiVNLib.Elements[ElementName] = function(...) return ElementFunction(...) end
+    SarXNightLib.Elements[ElementName] = function(...) return ElementFunction(...) end
 end
 
 local function MakeElement(ElementName, ...)
-    return SertaiVNLib.Elements[ElementName](...)
+    return SarXNightLib.Elements[ElementName](...)
 end
 
 local function SetProps(Element, Props)
@@ -160,9 +159,9 @@ local function ReturnProperty(Object)
 end
 
 local function AddThemeObject(Object, Type)
-    if not SertaiVNLib.ThemeObjects[Type] then SertaiVNLib.ThemeObjects[Type] = {} end
-    table.insert(SertaiVNLib.ThemeObjects[Type], Object)
-    Object[ReturnProperty(Object)] = SertaiVNLib.Themes[SertaiVNLib.SelectedTheme][Type]
+    if not SarXNightLib.ThemeObjects[Type] then SarXNightLib.ThemeObjects[Type] = {} end
+    table.insert(SarXNightLib.ThemeObjects[Type], Object)
+    Object[ReturnProperty(Object)] = SarXNightLib.Themes[SarXNightLib.SelectedTheme][Type]
     return Object
 end
 
@@ -172,29 +171,29 @@ local function UnpackColor(Color) return Color3.fromRGB(Color.R, Color.G, Color.
 local function LoadCfg(Config)
     local Data = HttpService:JSONDecode(Config)
     for a, b in pairs(Data) do
-        if SertaiVNLib.Flags[a] then
+        if SarXNightLib.Flags[a] then
             spawn(function()
-                if SertaiVNLib.Flags[a].Type == "Colorpicker" then
-                    SertaiVNLib.Flags[a]:Set(UnpackColor(b))
+                if SarXNightLib.Flags[a].Type == "Colorpicker" then
+                    SarXNightLib.Flags[a]:Set(UnpackColor(b))
                 else
-                    SertaiVNLib.Flags[a]:Set(b)
+                    SarXNightLib.Flags[a]:Set(b)
                 end
             end)
         else
-            warn("SertaiVN Library Config Loader - Could not find ", a, b)
+            warn("SarXNight Library Config Loader - Could not find ", a, b)
         end
     end
 end
 
 local function SaveCfg(Name)
     local Data = {}
-    for i, v in pairs(SertaiVNLib.Flags) do
+    for i, v in pairs(SarXNightLib.Flags) do
         if v.Save then
             if v.Type == "Colorpicker" then Data[i] = PackColor(v.Value)
             else Data[i] = v.Value end
         end
     end
-    writefile(SertaiVNLib.Folder .. "/" .. Name .. ".txt", tostring(HttpService:JSONEncode(Data)))
+    writefile(SarXNightLib.Folder .. "/" .. Name .. ".txt", tostring(HttpService:JSONEncode(Data)))
 end
 
 local WhitelistedMouse = {Enum.UserInputType.MouseButton1, Enum.UserInputType.MouseButton2, Enum.UserInputType.MouseButton3}
@@ -241,12 +240,11 @@ CreateElement("Label", function(Text, TextSize, Transparency)
     return Create("TextLabel", {Text = Text or "", TextColor3 = Color3.fromRGB(240,240,240), TextTransparency = Transparency or 0, TextSize = TextSize or 15, Font = Enum.Font.Gotham, RichText = true, BackgroundTransparency = 1, TextXAlignment = Enum.TextXAlignment.Left})
 end)
 
--- ============ NOTIFICATIONS (with image icon, no emoji) ============
 local NotificationHolder = SetProps(SetChildren(MakeElement("TFrame"), {
     SetProps(MakeElement("List"), {HorizontalAlignment = Enum.HorizontalAlignment.Center, SortOrder = Enum.SortOrder.LayoutOrder, VerticalAlignment = Enum.VerticalAlignment.Bottom, Padding = UDim.new(0,5)})
-}), {Position = UDim2.new(1,-25,1,-25), Size = UDim2.new(0,300,1,-25), AnchorPoint = Vector2.new(1,1), Parent = SertaiVN})
+}), {Position = UDim2.new(1,-25,1,-25), Size = UDim2.new(0,300,1,-25), AnchorPoint = Vector2.new(1,1), Parent = SarXNight})
 
-function SertaiVNLib:MakeNotification(NotificationConfig)
+function SarXNightLib:MakeNotification(NotificationConfig)
     spawn(function()
         NotificationConfig.Name = NotificationConfig.Name or "Notification"
         NotificationConfig.Content = NotificationConfig.Content or "Test"
@@ -261,7 +259,7 @@ function SertaiVNLib:MakeNotification(NotificationConfig)
             MakeElement("Stroke", Color3.fromRGB(93,93,93), 1.2),
             MakeElement("Padding", 12, 12, 12, 12),
             SetProps(MakeElement("Image", NotificationConfig.Image), {
-                Size = UDim2.new(0,20,0,20), Position = UDim2.new(0,0,0,0), ImageColor3 = SertaiVNLib.Themes.Default.Accent, Name = "Icon"
+                Size = UDim2.new(0,20,0,20), Position = UDim2.new(0,0,0,0), ImageColor3 = SarXNightLib.Themes.Default.Accent, Name = "Icon"
             }),
             SetProps(MakeElement("Label", NotificationConfig.Name, 15), {
                 Size = UDim2.new(1,-30,0,20), Position = UDim2.new(0,30,0,0), Font = Enum.Font.GothamBold, Name = "Title"
@@ -287,49 +285,54 @@ function SertaiVNLib:MakeNotification(NotificationConfig)
     end)
 end
 
-function SertaiVNLib:Init()
-    if SertaiVNLib.SaveCfg then
+function SarXNightLib:Init()
+    if SarXNightLib.SaveCfg then
         pcall(function()
-            if isfile(SertaiVNLib.Folder .. "/" .. game.GameId .. ".txt") then
-                LoadCfg(readfile(SertaiVNLib.Folder .. "/" .. game.GameId .. ".txt"))
-                SertaiVNLib:MakeNotification({Name = "Configuration", Content = "Auto-loaded configuration for the game " .. game.GameId .. ".", Time = 5})
+            if isfile(SarXNightLib.Folder .. "/" .. game.GameId .. ".txt") then
+                LoadCfg(readfile(SarXNightLib.Folder .. "/" .. game.GameId .. ".txt"))
+                SarXNightLib:MakeNotification({Name = "Configuration", Content = "Auto-loaded configuration for the game " .. game.GameId .. ".", Time = 5})
             end
         end)
     end
 end
 
-function SertaiVNLib:MakeWindow(WindowConfig)
+function SarXNightLib:MakeWindow(WindowConfig)
     local FirstTab = true
     local Minimized = false
     local UIHidden = false
 
     WindowConfig = WindowConfig or {}
-    WindowConfig.Name = WindowConfig.Name or "SertaiVN Library"
+    WindowConfig.Name = WindowConfig.Name or "SarXNight Library"
     WindowConfig.ConfigFolder = WindowConfig.ConfigFolder or WindowConfig.Name
     WindowConfig.SaveConfig = WindowConfig.SaveConfig or false
-    WindowConfig.Icon = WindowConfig.Icon or Assets.WindowIcon
+
+    -- ============ v3: Interface ID (window title icon) ============
+    WindowConfig.InterfaceId = WindowConfig.InterfaceId or WindowConfig.Icon or Assets.WindowIcon
+
     if WindowConfig.IntroEnabled == nil then WindowConfig.IntroEnabled = true end
-    WindowConfig.IntroText = WindowConfig.IntroText or "SertaiVN Library"
-    WindowConfig.IntroIcon = WindowConfig.IntroIcon or Assets.Logo
+    WindowConfig.IntroText = WindowConfig.IntroText or "SarXNight Library"
+
+    -- ============ v3: Loading Screen Logo ID ============
+    WindowConfig.LoadingLogoId = WindowConfig.LoadingLogoId or WindowConfig.IntroIcon or Assets.Logo
+
     WindowConfig.CloseCallback = WindowConfig.CloseCallback or function() end
-    SertaiVNLib.Folder = WindowConfig.ConfigFolder
-    SertaiVNLib.SaveCfg = WindowConfig.SaveConfig
+    SarXNightLib.Folder = WindowConfig.ConfigFolder
+    SarXNightLib.SaveCfg = WindowConfig.SaveConfig
 
     if WindowConfig.SaveConfig then
         if not isfolder(WindowConfig.ConfigFolder) then makefolder(WindowConfig.ConfigFolder) end
     end
 
-    -- ============ SEARCH BOX ============
     local SearchBox = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255,255,255), 0, 6), {
         Size = UDim2.new(1,-12,0,30), Position = UDim2.new(0,6,0,6)
     }), {
         AddThemeObject(MakeElement("Stroke"), "Stroke"),
         SetProps(MakeElement("Image", Assets.SearchIcon), {
-            Size = UDim2.new(0,14,0,14), Position = UDim2.new(0,8,0.5,-7), ImageColor3 = SertaiVNLib.Themes.Default.TextDark, Name = "Icon"
+            Size = UDim2.new(0,14,0,14), Position = UDim2.new(0,8,0.5,-7), ImageColor3 = SarXNightLib.Themes.Default.TextDark, Name = "Icon"
         }),
         AddThemeObject(Create("TextBox", {
             Size = UDim2.new(1,-30,1,0), Position = UDim2.new(0,28,0,0), BackgroundTransparency = 1,
-            PlaceholderText = "Search tabs...", PlaceholderColor3 = SertaiVNLib.Themes.Default.TextDark,
+            PlaceholderText = "Search tabs...", PlaceholderColor3 = SarXNightLib.Themes.Default.TextDark,
             Font = Enum.Font.GothamSemibold, TextSize = 13, TextXAlignment = Enum.TextXAlignment.Left,
             Text = "", ClearTextOnFocus = false, Name = "Input"
         }), "Text")
@@ -345,7 +348,6 @@ function SertaiVNLib:MakeWindow(WindowConfig)
         TabHolder.CanvasSize = UDim2.new(0,0,0, TabHolder.UIListLayout.AbsoluteContentSize.Y + 16)
     end)
 
-    -- Search filter
     AddConnection(SearchBox.Input:GetPropertyChangedSignal("Text"), function()
         local query = string.lower(SearchBox.Input.Text)
         for _, Tab in next, TabHolder:GetChildren() do
@@ -359,7 +361,6 @@ function SertaiVNLib:MakeWindow(WindowConfig)
         end
     end)
 
-    -- ============ CLOSE & MINIMIZE BUTTONS (image based) ============
     local CloseBtn = SetChildren(SetProps(MakeElement("Button"), {Size = UDim2.new(0.5,0,1,0), Position = UDim2.new(0.5,0,0,0), BackgroundTransparency = 1}), {
         AddThemeObject(SetProps(MakeElement("Image", Assets.CloseIcon), {
             AnchorPoint = Vector2.new(0.5,0.5), Position = UDim2.new(0.5,0,0.5,0), Size = UDim2.new(0,14,0,14)
@@ -401,9 +402,9 @@ function SertaiVNLib:MakeWindow(WindowConfig)
         })
     }), "Second")
 
-    -- ============ WINDOW TITLE with ICON ============
-    local WindowIcon = SetProps(MakeElement("Image", WindowConfig.Icon), {
-        Size = UDim2.new(0,20,0,20), Position = UDim2.new(0,15,0,15), ImageColor3 = SertaiVNLib.Themes.Default.Accent
+    -- ============ Window Title with Interface ID icon ============
+    local WindowIcon = SetProps(MakeElement("Image", WindowConfig.InterfaceId), {
+        Size = UDim2.new(0,20,0,20), Position = UDim2.new(0,15,0,15), ImageColor3 = SarXNightLib.Themes.Default.Accent, Name = "InterfaceIcon"
     })
 
     local WindowName = AddThemeObject(SetProps(MakeElement("Label", WindowConfig.Name, 14), {
@@ -413,7 +414,7 @@ function SertaiVNLib:MakeWindow(WindowConfig)
     local WindowTopBarLine = AddThemeObject(SetProps(MakeElement("Frame"), {Size = UDim2.new(1,0,0,1), Position = UDim2.new(0,0,1,-1)}), "Stroke")
 
     local MainWindow = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", Color3.fromRGB(255,255,255), 0, 10), {
-        Parent = SertaiVN, Position = UDim2.new(0.5,-307,0.5,-172), Size = UDim2.new(0,615,0,344), ClipsDescendants = true
+        Parent = SarXNight, Position = UDim2.new(0.5,-307,0.5,-172), Size = UDim2.new(0,615,0,344), ClipsDescendants = true
     }), {
         SetChildren(SetProps(MakeElement("TFrame"), {Size = UDim2.new(1,0,0,50), Name = "TopBar"}), {
             WindowIcon, WindowName, WindowTopBarLine,
@@ -426,27 +427,25 @@ function SertaiVNLib:MakeWindow(WindowConfig)
         DragPoint, WindowStuff
     }), "Main")
 
-    -- ============ MOBILE TOGGLE (image icon, draggable, no flicker) ============
+    -- Mobile toggle (uses Interface ID icon)
     local MobileToggleFrame = SetProps(MakeElement("TFrame"), {
-        Parent = SertaiVN, Position = UDim2.new(0,15,0,80), Size = UDim2.new(0,50,0,50), Visible = false
+        Parent = SarXNight, Position = UDim2.new(0,15,0,80), Size = UDim2.new(0,50,0,50), Visible = false
     })
 
-    local MobileToggle = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", SertaiVNLib.Themes.Default.Second, 1, 0), {
+    local MobileToggle = AddThemeObject(SetChildren(SetProps(MakeElement("RoundFrame", SarXNightLib.Themes.Default.Second, 1, 0), {
         Parent = MobileToggleFrame, Size = UDim2.new(1,0,1,0)
     }), {
-        AddThemeObject(MakeElement("Stroke", SertaiVNLib.Themes.Default.Accent, 2), "Accent"),
-        SetProps(MakeElement("Image", Assets.ToggleIcon), {
+        AddThemeObject(MakeElement("Stroke", SarXNightLib.Themes.Default.Accent, 2), "Accent"),
+        SetProps(MakeElement("Image", WindowConfig.InterfaceId), {
             AnchorPoint = Vector2.new(0.5,0.5), Position = UDim2.new(0.5,0,0.5,0), Size = UDim2.new(0,26,0,26),
-            ImageColor3 = SertaiVNLib.Themes.Default.Accent
+            ImageColor3 = SarXNightLib.Themes.Default.Accent
         })
     }), "Second")
 
-    -- Separate invisible click button on top (only triggers on tap, not drag)
     local ToggleClickButton = SetProps(MakeElement("Button"), {
         Parent = MobileToggleFrame, Size = UDim2.new(1,0,1,0), Name = "ClickArea"
     })
 
-    -- Dragging logic for mobile toggle (won't trigger click if dragged)
     do
         local dragging, dragStart, startPos, didMove = false, nil, nil, false
         ToggleClickButton.InputBegan:Connect(function(Input)
@@ -467,7 +466,6 @@ function SertaiVNLib:MakeWindow(WindowConfig)
         UserInputService.InputEnded:Connect(function(Input)
             if Input.UserInputType == Enum.UserInputType.MouseButton1 or Input.UserInputType == Enum.UserInputType.Touch then
                 if dragging and not didMove then
-                    -- Treat as click
                     MainWindow.Visible = true
                     UIHidden = false
                     MobileToggleFrame.Visible = false
@@ -483,7 +481,7 @@ function SertaiVNLib:MakeWindow(WindowConfig)
         MainWindow.Visible = false
         UIHidden = true
         MobileToggleFrame.Visible = true
-        SertaiVNLib:MakeNotification({Name = "Interface Hidden", Content = "Press RightShift (PC) or tap the floating icon (Mobile) to reopen.", Time = 5})
+        SarXNightLib:MakeNotification({Name = "Interface Hidden", Content = "Press RightShift (PC) or tap the floating icon (Mobile) to reopen.", Time = 5})
         WindowConfig.CloseCallback()
     end)
 
@@ -498,7 +496,6 @@ function SertaiVNLib:MakeWindow(WindowConfig)
     AddConnection(MinimizeBtn.MouseButton1Up, function()
         if Minimized then
             TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0,615,0,344)}):Play()
-            MinimizeBtn.Ico.Image = Assets.MinimizeIcon
             wait(0.02)
             MainWindow.ClipsDescendants = false
             WindowStuff.Visible = true
@@ -506,7 +503,6 @@ function SertaiVNLib:MakeWindow(WindowConfig)
         else
             MainWindow.ClipsDescendants = true
             WindowTopBarLine.Visible = false
-            MinimizeBtn.Ico.Image = Assets.MinimizeIcon
             TweenService:Create(MainWindow, TweenInfo.new(0.5, Enum.EasingStyle.Quint, Enum.EasingDirection.Out), {Size = UDim2.new(0, WindowName.TextBounds.X + 180, 0, 50)}):Play()
             wait(0.1)
             WindowStuff.Visible = false
@@ -514,21 +510,21 @@ function SertaiVNLib:MakeWindow(WindowConfig)
         Minimized = not Minimized
     end)
 
-    -- ============ NEW LOADING SCREEN (image logo, typewriter text) ============
+    -- ============ LOADING SCREEN (uses LoadingLogoId) ============
     local function LoadSequence()
         MainWindow.Visible = false
 
         local LoadingBg = SetProps(MakeElement("RoundFrame", Color3.fromRGB(15,15,20), 0, 0), {
-            Parent = SertaiVN, Size = UDim2.new(1,0,1,0), Position = UDim2.new(0,0,0,0), BackgroundTransparency = 0, ZIndex = 100
+            Parent = SarXNight, Size = UDim2.new(1,0,1,0), Position = UDim2.new(0,0,0,0), BackgroundTransparency = 0, ZIndex = 100
         })
         Create("UIGradient", {Color = ColorSequence.new(Color3.fromRGB(15,15,20), Color3.fromRGB(25,20,40)), Rotation = 135, Parent = LoadingBg})
 
-        local LogoCircle = SetProps(MakeElement("RoundFrame", SertaiVNLib.Themes.Default.Accent, 1, 0), {
+        local LogoCircle = SetProps(MakeElement("RoundFrame", SarXNightLib.Themes.Default.Accent, 1, 0), {
             Parent = LoadingBg, AnchorPoint = Vector2.new(0.5,0.5), Position = UDim2.new(0.5,0,0.5,-30), Size = UDim2.new(0,0,0,0), ZIndex = 101
         })
-        Create("UIGradient", {Color = ColorSequence.new(SertaiVNLib.Themes.Default.Accent, Color3.fromRGB(90,70,200)), Rotation = 45, Parent = LogoCircle})
+        Create("UIGradient", {Color = ColorSequence.new(SarXNightLib.Themes.Default.Accent, Color3.fromRGB(90,70,200)), Rotation = 45, Parent = LogoCircle})
 
-        local LogoImage = SetProps(MakeElement("Image", WindowConfig.IntroIcon), {
+        local LogoImage = SetProps(MakeElement("Image", WindowConfig.LoadingLogoId), {
             Parent = LogoCircle, AnchorPoint = Vector2.new(0.5,0.5), Position = UDim2.new(0.5,0,0.5,0), Size = UDim2.new(0,40,0,40),
             ImageColor3 = Color3.fromRGB(255,255,255), ImageTransparency = 1, ZIndex = 102
         })
@@ -546,7 +542,6 @@ function SertaiVNLib:MakeWindow(WindowConfig)
         TweenService:Create(LogoImage, TweenInfo.new(0.4, Enum.EasingStyle.Quint), {ImageTransparency = 0}):Play()
         wait(0.5)
 
-        -- Typewriter effect
         local fullText = WindowConfig.IntroText
         for i = 1, #fullText do
             TitleText.Text = string.sub(fullText, 1, i)
@@ -658,10 +653,10 @@ function SertaiVNLib:MakeWindow(WindowConfig)
                     AddThemeObject(MakeElement("Stroke"), "Stroke"),
                     Click
                 }), "Second")
-                AddConnection(Click.MouseEnter, function() TweenService:Create(ButtonFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(SertaiVNLib.Themes[SertaiVNLib.SelectedTheme].Second.R*255+3, SertaiVNLib.Themes[SertaiVNLib.SelectedTheme].Second.G*255+3, SertaiVNLib.Themes[SertaiVNLib.SelectedTheme].Second.B*255+3)}):Play() end)
-                AddConnection(Click.MouseLeave, function() TweenService:Create(ButtonFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quint), {BackgroundColor3 = SertaiVNLib.Themes[SertaiVNLib.SelectedTheme].Second}):Play() end)
-                AddConnection(Click.MouseButton1Up, function() TweenService:Create(ButtonFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(SertaiVNLib.Themes[SertaiVNLib.SelectedTheme].Second.R*255+3, SertaiVNLib.Themes[SertaiVNLib.SelectedTheme].Second.G*255+3, SertaiVNLib.Themes[SertaiVNLib.SelectedTheme].Second.B*255+3)}):Play(); spawn(function() ButtonConfig.Callback() end) end)
-                AddConnection(Click.MouseButton1Down, function() TweenService:Create(ButtonFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(SertaiVNLib.Themes[SertaiVNLib.SelectedTheme].Second.R*255+6, SertaiVNLib.Themes[SertaiVNLib.SelectedTheme].Second.G*255+6, SertaiVNLib.Themes[SertaiVNLib.SelectedTheme].Second.B*255+6)}):Play() end)
+                AddConnection(Click.MouseEnter, function() TweenService:Create(ButtonFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(SarXNightLib.Themes[SarXNightLib.SelectedTheme].Second.R*255+3, SarXNightLib.Themes[SarXNightLib.SelectedTheme].Second.G*255+3, SarXNightLib.Themes[SarXNightLib.SelectedTheme].Second.B*255+3)}):Play() end)
+                AddConnection(Click.MouseLeave, function() TweenService:Create(ButtonFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quint), {BackgroundColor3 = SarXNightLib.Themes[SarXNightLib.SelectedTheme].Second}):Play() end)
+                AddConnection(Click.MouseButton1Up, function() TweenService:Create(ButtonFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(SarXNightLib.Themes[SarXNightLib.SelectedTheme].Second.R*255+3, SarXNightLib.Themes[SarXNightLib.SelectedTheme].Second.G*255+3, SarXNightLib.Themes[SarXNightLib.SelectedTheme].Second.B*255+3)}):Play(); spawn(function() ButtonConfig.Callback() end) end)
+                AddConnection(Click.MouseButton1Down, function() TweenService:Create(ButtonFrame, TweenInfo.new(0.25, Enum.EasingStyle.Quint), {BackgroundColor3 = Color3.fromRGB(SarXNightLib.Themes[SarXNightLib.SelectedTheme].Second.R*255+6, SarXNightLib.Themes[SarXNightLib.SelectedTheme].Second.G*255+6, SarXNightLib.Themes[SarXNightLib.SelectedTheme].Second.B*255+6)}):Play() end)
                 function Button:Set(ButtonText) ButtonFrame.Content.Text = ButtonText end
                 return Button
             end
@@ -671,7 +666,7 @@ function SertaiVNLib:MakeWindow(WindowConfig)
                 ToggleConfig.Name = ToggleConfig.Name or "Toggle"
                 ToggleConfig.Default = ToggleConfig.Default or false
                 ToggleConfig.Callback = ToggleConfig.Callback or function() end
-                ToggleConfig.Color = ToggleConfig.Color or SertaiVNLib.Themes.Default.Accent
+                ToggleConfig.Color = ToggleConfig.Color or SarXNightLib.Themes.Default.Accent
                 ToggleConfig.Flag = ToggleConfig.Flag or nil
                 ToggleConfig.Save = ToggleConfig.Save or false
                 local Toggle = {Value = ToggleConfig.Default, Save = ToggleConfig.Save}
@@ -686,14 +681,14 @@ function SertaiVNLib:MakeWindow(WindowConfig)
                 }), "Second")
                 function Toggle:Set(Value)
                     Toggle.Value = Value
-                    TweenService:Create(ToggleBox, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {BackgroundColor3 = Toggle.Value and ToggleConfig.Color or SertaiVNLib.Themes.Default.Divider}):Play()
-                    TweenService:Create(ToggleBox.Stroke, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {Color = Toggle.Value and ToggleConfig.Color or SertaiVNLib.Themes.Default.Stroke}):Play()
+                    TweenService:Create(ToggleBox, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {BackgroundColor3 = Toggle.Value and ToggleConfig.Color or SarXNightLib.Themes.Default.Divider}):Play()
+                    TweenService:Create(ToggleBox.Stroke, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {Color = Toggle.Value and ToggleConfig.Color or SarXNightLib.Themes.Default.Stroke}):Play()
                     TweenService:Create(ToggleBox.Ico, TweenInfo.new(0.3, Enum.EasingStyle.Quint), {ImageTransparency = Toggle.Value and 0 or 1}):Play()
                     ToggleConfig.Callback(Toggle.Value)
                 end
                 Toggle:Set(Toggle.Value)
                 AddConnection(Click.MouseButton1Up, function() SaveCfg(game.GameId); Toggle:Set(not Toggle.Value) end)
-                if ToggleConfig.Flag then SertaiVNLib.Flags[ToggleConfig.Flag] = Toggle end
+                if ToggleConfig.Flag then SarXNightLib.Flags[ToggleConfig.Flag] = Toggle end
                 return Toggle
             end
 
@@ -706,7 +701,7 @@ function SertaiVNLib:MakeWindow(WindowConfig)
                 SliderConfig.Default = SliderConfig.Default or 50
                 SliderConfig.Callback = SliderConfig.Callback or function() end
                 SliderConfig.ValueName = SliderConfig.ValueName or ""
-                SliderConfig.Color = SliderConfig.Color or SertaiVNLib.Themes.Default.Accent
+                SliderConfig.Color = SliderConfig.Color or SarXNightLib.Themes.Default.Accent
                 SliderConfig.Flag = SliderConfig.Flag or nil
                 SliderConfig.Save = SliderConfig.Save or false
                 local Slider = {Value = SliderConfig.Default, Save = SliderConfig.Save}
@@ -751,11 +746,10 @@ function SertaiVNLib:MakeWindow(WindowConfig)
                     SliderConfig.Callback(self.Value)
                 end
                 Slider:Set(Slider.Value)
-                if SliderConfig.Flag then SertaiVNLib.Flags[SliderConfig.Flag] = Slider end
+                if SliderConfig.Flag then SarXNightLib.Flags[SliderConfig.Flag] = Slider end
                 return Slider
             end
 
-            -- ============ DROPDOWN (max 3 visible, scrollable, fixed length) ============
             function ElementFunction:AddDropdown(DropdownConfig)
                 DropdownConfig = DropdownConfig or {}
                 DropdownConfig.Name = DropdownConfig.Name or "Dropdown"
@@ -765,12 +759,12 @@ function SertaiVNLib:MakeWindow(WindowConfig)
                 DropdownConfig.Flag = DropdownConfig.Flag or nil
                 DropdownConfig.Save = DropdownConfig.Save or false
                 local Dropdown = {Value = DropdownConfig.Default, Options = DropdownConfig.Options, Buttons = {}, Toggled = false, Type = "Dropdown", Save = DropdownConfig.Save}
-                local MaxElements = 3 -- FIXED max length = 3
+                local MaxElements = 3
                 local ItemHeight = 28
                 if not table.find(Dropdown.Options, Dropdown.Value) then Dropdown.Value = "..." end
 
                 local DropdownList = MakeElement("List", 0, 2)
-                local DropdownContainer = AddThemeObject(SetProps(SetChildren(MakeElement("ScrollFrame", SertaiVNLib.Themes.Default.Accent, 4), {
+                local DropdownContainer = AddThemeObject(SetProps(SetChildren(MakeElement("ScrollFrame", SarXNightLib.Themes.Default.Accent, 4), {
                     DropdownList, MakeElement("Padding", 4, 4, 4, 4)
                 }), {Parent = nil, Position = UDim2.new(0,0,0,38), Size = UDim2.new(1,0,1,-38), ClipsDescendants = true, ScrollingDirection = Enum.ScrollingDirection.Y}), "Divider")
                 local Click = SetProps(MakeElement("Button"), {Size = UDim2.new(1,0,1,0)})
@@ -835,14 +829,13 @@ function SertaiVNLib:MakeWindow(WindowConfig)
                     Dropdown.Toggled = not Dropdown.Toggled
                     DropdownFrame.F.Line.Visible = Dropdown.Toggled
                     TweenService:Create(DropdownFrame.F.Ico, TweenInfo.new(0.15, Enum.EasingStyle.Quad), {Rotation = Dropdown.Toggled and 180 or 0}):Play()
-                    -- FIXED: Always cap at MaxElements (3) so dropdown never grows huge
                     local visibleCount = math.min(#Dropdown.Options, MaxElements)
                     local expandedHeight = 38 + (visibleCount * (ItemHeight + 2)) + 8
                     TweenService:Create(DropdownFrame, TweenInfo.new(0.2, Enum.EasingStyle.Quad), {Size = Dropdown.Toggled and UDim2.new(1,0,0,expandedHeight) or UDim2.new(1,0,0,38)}):Play()
                 end)
 
                 Dropdown:Refresh(Dropdown.Options, false); Dropdown:Set(Dropdown.Value)
-                if DropdownConfig.Flag then SertaiVNLib.Flags[DropdownConfig.Flag] = Dropdown end
+                if DropdownConfig.Flag then SarXNightLib.Flags[DropdownConfig.Flag] = Dropdown end
                 return Dropdown
             end
 
@@ -894,7 +887,7 @@ function SertaiVNLib:MakeWindow(WindowConfig)
                 end)
                 function Bind:Set(Key) Bind.Binding = false; Bind.Value = Key or Bind.Value; Bind.Value = Bind.Value.Name or Bind.Value; BindBox.Value.Text = Bind.Value end
                 Bind:Set(BindConfig.Default)
-                if BindConfig.Flag then SertaiVNLib.Flags[BindConfig.Flag] = Bind end
+                if BindConfig.Flag then SarXNightLib.Flags[BindConfig.Flag] = Bind end
                 return Bind
             end
 
@@ -996,7 +989,7 @@ function SertaiVNLib:MakeWindow(WindowConfig)
                 end)
                 function Colorpicker:Set(Value) Colorpicker.Value = Value; ColorpickerBox.BackgroundColor3 = Colorpicker.Value; ColorpickerConfig.Callback(Colorpicker.Value) end
                 Colorpicker:Set(Colorpicker.Value)
-                if ColorpickerConfig.Flag then SertaiVNLib.Flags[ColorpickerConfig.Flag] = Colorpicker end
+                if ColorpickerConfig.Flag then SarXNightLib.Flags[ColorpickerConfig.Flag] = Colorpicker end
                 return Colorpicker
             end
 
@@ -1025,8 +1018,8 @@ function SertaiVNLib:MakeWindow(WindowConfig)
     return TabFunction
 end
 
-function SertaiVNLib:Destroy()
-    SertaiVN:Destroy()
+function SarXNightLib:Destroy()
+    SarXNight:Destroy()
 end
 
-return SertaiVNLib
+return SarXNightLib
