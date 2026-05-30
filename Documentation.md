@@ -3,7 +3,7 @@ This documentation is for the stable release of Orion Library.
 
 ## Booting the Library
 ```lua
-local SarXNightLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
+local SarXNightLib = loadstring(game:HttpGet(('https://github.com/Styuai6/SarXNight-Ui-Library/blob/main/Source.luau')))()
 ```
 
 
