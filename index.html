@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>SarXNight Hub — Premium Roblox UI Library</title>
+<link rel="stylesheet" href="style.css" />
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+</head>
+<body>
+
+<!-- Animated background -->
+<div class="bg-gradient"></div>
+<div class="bg-stars" id="stars"></div>
+
+<!-- Navigation -->
+<nav class="navbar">
+  <div class="nav-container">
+    <a href="#" class="nav-logo">
+      <div class="logo-circle">
+        <span>S</span>
+      </div>
+      <span class="logo-text">SarXNight</span>
+    </a>
+    <ul class="nav-links">
+      <li><a href="#features">Features</a></li>
+      <li><a href="#showcase">Showcase</a></li>
+      <li><a href="#docs">Docs</a></li>
+      <li><a href="#get-started">Get Started</a></li>
+    </ul>
+    <button class="nav-cta" onclick="copyScript()">Copy Loader</button>
+    <button class="nav-burger" id="burger"><span></span><span></span><span></span></button>
+  </div>
+</nav>
+
+<!-- Hero -->
+<section class="hero">
+  <div class="hero-badge">
+    <span class="dot"></span>
+    Version 3.0 — Now Available
+  </div>
+  <h1 class="hero-title">
+    Build beautiful Roblox UIs <span class="gradient-text">in seconds.</span>
+  </h1>
+  <p class="hero-subtitle">
+    SarXNight is a sleek, mobile-friendly UI library with image-based icons, search-filtered tabs,
+    scrollable dropdowns, and a polished animated loading screen. Built for creators who care about detail.
+  </p>
+  <div class="hero-cta">
+    <button class="btn-primary" onclick="copyScript()">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+      Copy Loader Script
+    </button>
+    <a href="#docs" class="btn-secondary">View Documentation</a>
+  </div>
+
+  <div class="code-preview">
+    <div class="code-header">
+      <div class="code-dots">
+        <span></span><span></span><span></span>
+      </div>
+      <span class="code-filename">loader.lua</span>
+      <button class="code-copy" onclick="copyScript()">Copy</button>
+    </div>
+    <pre><code><span class="kw">local</span> <span class="var">SarXNight</span> = <span class="fn">loadstring</span>(game:HttpGet(<span class="str">"https://sarxnight.hub/Source.luau"</span>))()
+
+<span class="kw">local</span> <span class="var">Window</span> = SarXNight:MakeWindow({
+    Name = <span class="str">"My Hub"</span>,
+    InterfaceId = <span class="str">"rbxassetid://11436111346"</span>,
+    LoadingLogoId = <span class="str">"rbxassetid://11436111346"</span>,
+    IntroText = <span class="str">"Welcome"</span>,
+    SaveConfig = <span class="kw">true</span>,
+})
+
+<span class="kw">local</span> <span class="var">Tab</span> = Window:MakeTab({ Name = <span class="str">"Main"</span> })
+Tab:AddToggle({ Name = <span class="str">"Auto Farm"</span>, Callback = <span class="kw">function</span>(v) <span class="kw">end</span> })</code></pre>
+  </div>
+</section>
+
+<!-- Stats -->
+<section class="stats">
+  <div class="stat"><div class="stat-num" data-target="12">0</div><div class="stat-label">UI Elements</div></div>
+  <div class="stat"><div class="stat-num" data-target="3">0</div><div class="stat-label">Major Versions</div></div>
+  <div class="stat"><div class="stat-num" data-target="100">0</div><div class="stat-label">% Mobile Ready</div></div>
+  <div class="stat"><div class="stat-num" data-target="60">0</div><div class="stat-label">FPS Animations</div></div>
+</section>
+
+<!-- Features -->
+<section class="features" id="features">
+  <div class="section-head">
+    <span class="eyebrow">Features</span>
+    <h2>Everything you need, nothing you don't.</h2>
+    <p>Built from the ground up to feel native on both desktop and mobile.</p>
+  </div>
+
+  <div class="feature-grid">
+    <div class="feature-card">
+      <div class="feature-icon" style="background: linear-gradient(135deg,#826EE6,#6055C9);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/></svg>
+      </div>
+      <h3>Custom Icons</h3>
+      <p>Pass your own <code>rbxassetid://</code> for the window title, loading screen, tabs, and notifications.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon" style="background: linear-gradient(135deg,#3FB6FF,#1E7DD8);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+      </div>
+      <h3>Searchable Tabs</h3>
+      <p>A search bar at the top of the sidebar filters tabs in real time. Perfect for hubs with many tabs.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon" style="background: linear-gradient(135deg,#FF6B9D,#D63E73);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="20" height="12" rx="2"/><path d="M6 12h12"/></svg>
+      </div>
+      <h3>Smart Dropdowns</h3>
+      <p>Capped at 3 visible options with built-in scrolling. No more giant lists pushing your UI off the screen.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon" style="background: linear-gradient(135deg,#42E695,#21B07A);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="5" y="2" width="14" height="20" rx="2"/><line x1="12" y1="18" x2="12" y2="18"/></svg>
+      </div>
+      <h3>Mobile First</h3>
+      <p>Draggable floating toggle, touch-friendly sliders, and tap-vs-drag detection that actually works.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon" style="background: linear-gradient(135deg,#FFB547,#E08819);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="23 4 23 10 17 10"/><polyline points="1 20 1 14 7 14"/><path d="M3.51 9a9 9 0 0 1 14.85-3.36L23 10M1 14l4.64 4.36A9 9 0 0 0 20.49 15"/></svg>
+      </div>
+      <h3>Config Saving</h3>
+      <p>Flag any element with <code>Save = true</code> and it's automatically persisted between sessions.</p>
+    </div>
+
+    <div class="feature-card">
+      <div class="feature-icon" style="background: linear-gradient(135deg,#EC5CFF,#A93BCC);">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 2L2 7l10 5 10-5-10-5z"/><path d="M2 17l10 5 10-5M2 12l10 5 10-5"/></svg>
+      </div>
+      <h3>Animated Loader</h3>
+      <p>Gradient background, expanding logo circle, and typewriter intro text. Make a great first impression.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Showcase -->
+<section class="showcase" id="showcase">
+  <div class="section-head">
+    <span class="eyebrow">Showcase</span>
+    <h2>Polished by default.</h2>
+    <p>Every element has been tuned for clarity and consistency.</p>
+  </div>
+
+  <div class="showcase-grid">
+    <div class="showcase-item">
+      <div class="mock-window">
+        <div class="mock-topbar">
+          <div class="mock-icon"></div>
+          <div class="mock-title">My Hub</div>
+          <div class="mock-buttons">
+            <span></span><span></span>
+          </div>
+        </div>
+        <div class="mock-body">
+          <div class="mock-sidebar">
+            <div class="mock-search"></div>
+            <div class="mock-tab active">Main</div>
+            <div class="mock-tab">Combat</div>
+            <div class="mock-tab">Visual</div>
+            <div class="mock-tab">Misc</div>
+          </div>
+          <div class="mock-content">
+            <div class="mock-element mock-toggle">
+              <span>Auto Farm</span>
+              <div class="mock-switch on"></div>
+            </div>
+            <div class="mock-element mock-slider">
+              <span>WalkSpeed</span>
+              <div class="mock-bar"><div class="mock-fill"></div></div>
+            </div>
+            <div class="mock-element mock-dropdown">
+              <span>Weapon</span>
+              <span class="mock-arrow">▼</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <h4>Main Window</h4>
+      <p>Clean topbar, sidebar with search, and a focused content area.</p>
+    </div>
+
+    <div class="showcase-item">
+      <div class="mock-loading">
+        <div class="mock-logo">
+          <div class="mock-logo-inner"></div>
+        </div>
+        <div class="mock-typing">Welcome</div>
+        <div class="mock-sub">Loading...</div>
+      </div>
+      <h4>Loading Screen</h4>
+      <p>Animated logo with custom asset ID and a smooth typewriter intro.</p>
+    </div>
+
+    <div class="showcase-item">
+      <div class="mock-mobile">
+        <div class="mock-toggle-btn">
+          <div class="mock-toggle-icon"></div>
+        </div>
+        <div class="mock-tap-hint">Tap to open</div>
+      </div>
+      <h4>Mobile Toggle</h4>
+      <p>Draggable floating icon that knows the difference between a tap and a drag.</p>
+    </div>
+  </div>
+</section>
+
+<!-- Documentation Preview -->
+<section class="docs" id="docs">
+  <div class="section-head">
+    <span class="eyebrow">Documentation</span>
+    <h2>From zero to hero in 30 seconds.</h2>
+  </div>
+
+  <div class="docs-tabs">
+    <button class="doc-tab active" data-tab="window">Window</button>
+    <button class="doc-tab" data-tab="toggle">Toggle</button>
+    <button class="doc-tab" data-tab="slider">Slider</button>
+    <button class="doc-tab" data-tab="dropdown">Dropdown</button>
+    <button class="doc-tab" data-tab="notification">Notification</button>
+  </div>
+
+  <div class="docs-panes">
+    <div class="doc-pane active" data-pane="window">
+      <pre><code><span class="kw">local</span> Window = SarXNight:MakeWindow({
+    Name = <span class="str">"My Hub"</span>,
+    InterfaceId = <span class="str">"rbxassetid://11436111346"</span>,
+    LoadingLogoId = <span class="str">"rbxassetid://11436111346"</span>,
+    IntroEnabled = <span class="kw">true</span>,
+    IntroText = <span class="str">"Welcome"</span>,
+    SaveConfig = <span class="kw">true</span>,
+    ConfigFolder = <span class="str">"MyHub"</span>
+})</code></pre>
+    </div>
+    <div class="doc-pane" data-pane="toggle">
+      <pre><code>Tab:AddToggle({
+    Name = <span class="str">"Auto Farm"</span>,
+    Default = <span class="kw">false</span>,
+    Flag = <span class="str">"autofarm"</span>,
+    Save = <span class="kw">true</span>,
+    Callback = <span class="kw">function</span>(v) <span class="fn">print</span>(v) <span class="kw">end</span>
+})</code></pre>
+    </div>
+    <div class="doc-pane" data-pane="slider">
+      <pre><code>Tab:AddSlider({
+    Name = <span class="str">"Speed"</span>,
+    Min = <span class="num">16</span>, Max = <span class="num">200</span>, Default = <span class="num">16</span>,
+    Increment = <span class="num">1</span>,
+    ValueName = <span class="str">"studs/s"</span>,
+    Flag = <span class="str">"speed"</span>, Save = <span class="kw">true</span>,
+    Callback = <span class="kw">function</span>(v) <span class="kw">end</span>
+})</code></pre>
+    </div>
+    <div class="doc-pane" data-pane="dropdown">
+      <pre><code>Tab:AddDropdown({
+    Name = <span class="str">"Mode"</span>,
+    Options = {<span class="str">"One"</span>, <span class="str">"Two"</span>, <span class="str">"Three"</span>, <span class="str">"Four"</span>},
+    Default = <span class="str">"One"</span>,
+    Flag = <span class="str">"mode"</span>, Save = <span class="kw">true</span>,
+    Callback = <span class="kw">function</span>(v) <span class="kw">end</span>
+})</code></pre>
+    </div>
+    <div class="doc-pane" data-pane="notification">
+      <pre><code>SarXNight:MakeNotification({
+    Name = <span class="str">"Loaded"</span>,
+    Content = <span class="str">"Welcome to the hub!"</span>,
+    Image = <span class="str">"rbxassetid://10709751939"</span>,
+    Time = <span class="num">5</span>
+})</code></pre>
+    </div>
+  </div>
+</section>
+
+<!-- Get Started -->
+<section class="get-started" id="get-started">
+  <div class="get-started-card">
+    <h2>Ready to build?</h2>
+    <p>Drop the loader into your script and you're live in under a minute.</p>
+    <div class="loader-box">
+      <code id="loaderScript">local SarXNight = loadstring(game:HttpGet("https://sarxnight.hub/Source.luau"))()</code>
+      <button class="btn-primary" onclick="copyScript()">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+        Copy
+      </button>
+    </div>
+  </div>
+</section>
+
+<!-- Footer -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-brand">
+      <div class="logo-circle small"><span>S</span></div>
+      <span>SarXNight Hub</span>
+    </div>
+    <div class="footer-links">
+      <a href="#features">Features</a>
+      <a href="#docs">Docs</a>
+      <a href="#get-started">Get Started</a>
+    </div>
+    <div class="footer-copy">© 2025 SarXNight Hub. All rights reserved.</div>
+  </div>
+</footer>
+
+<!-- Toast -->
+<div class="toast" id="toast">
+  <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="20 6 9 17 4 12"/></svg>
+  <span>Script copied to clipboard!</span>
+</div>
+
+<script src="script.js"></script>
+</body>
+</html>
