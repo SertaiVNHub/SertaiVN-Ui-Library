@@ -1,359 +1,298 @@
-# SertaiVN UI Library v2.2 Documentation
+# Orion Library
+This documentation is for the stable release of Orion Library.
 
-> Based on Orion (Discontinued) — Thanks to Orion team!  
-> **v2.2: Major redesign with settings panel, search, and image-based icons**
-
----
-
-## 🔄 v2.2 Changelog
-
-### ❌ Removed
-- **`PremiumOnly` parameter** — No longer in `MakeTab` (removed entirely)
-- **`AddSection` function** — Sections removed (no more length issues)
-- **Emoji icons in tabs** — Replaced with `rbxassetid` images
-- **Feather Icons HTTP fetch** — Removed (no external requests)
-- **Dropdown unlimited length** — Now capped at 3 visible, scrolls for more
-
-### ✅ Added
-- **Settings Panel** — Built-in panel accessible via sidebar button
-  - Profile (avatar, DisplayName, @username, UserID)
-  - Device detection (PC/Mobile)
-  - Live FPS counter
-  - Live Ping counter
-  - Discord socials paragraph
-- **Search tabs bar** — Filter tabs by name in real-time
-- **Socials Paragraph** — `AddSocialsParagraph` with image + copy URL button
-- **Window icon support** — `WindowConfig.Icon` (rbxassetid)
-- **Mobile toggle button image** — Custom rbxassetid instead of "S" text
-- **Mobile toggle drag** — Floating button now draggable
-- **Dropdown scrolling** — Always limited to 3 visible, scrolls for >3
-- **Image-based notifications** — `Image` parameter accepts rbxassetid (number)
-
-### 🎨 New Design
-- **Reworked loading screen** — Logo box with image (rbxassetid) instead of text
-- **Default icons** — Close: `99967063680607`, Settings: `2484550861`, Home: `9405923708`
-- **Sidebar with search + Settings button** — New layout
-
----
-
-## 🚀 Quick Start
-
+## Booting the Library
 ```lua
-local SertaiVNLib = loadstring(game:HttpGet("https://github.com/SertaiVNHub/SertaiVN-Ui-Library/blob/main/Source.luau"))()
-
-local Window = SertaiVNLib:MakeWindow({
-    Name = "SertaiVN Hub",
-    Icon = 9405923708,           -- Window top-left icon
-    IntroIcon = 9405923708,      -- Loading screen logo
-    ToggleIcon = 9405923708,     -- Mobile floating button icon
-    CloseIcon = 99967063680607,  -- Close (X) icon
-    SettingsIcon = 2484550861,   -- Settings button icon
-    HomeIcon = 9405923708,       -- Default tab icon
-    IntroText = "SertaiVN Hub",
-    SaveConfig = true,
-    ConfigFolder = "SertaiVNHub"
-})
-
-local Tab = Window:MakeTab({Name = "Main", Icon = 9405923708})
-
-Tab:AddButton({Name = "Click Me", Callback = function()
-    SertaiVNLib:MakeNotification({Name = "Clicked", Content = "Works!", Image = 4384403532, Time = 4})
-end})
-
-SertaiVNLib:Init()
+local SarXNightLib = loadstring(game:HttpGet(('https://raw.githubusercontent.com/jensonhirst/Orion/main/source')))()
 ```
 
----
 
-## 🪟 Window Config
 
-| Property | Type | Default | Description |
-|----------|------|---------|-------------|
-| Name | string | "SertaiVN Library" | Window title |
-| Icon | number | 9405923708 | Window top icon (rbxassetid) |
-| IntroIcon | number | 9405923708 | Loading logo (rbxassetid) |
-| ToggleIcon | number | 9405923708 | Mobile button icon (rbxassetid) |
-| CloseIcon | number | 99967063680607 | Close X icon (rbxassetid) |
-| SettingsIcon | number | 2484550861 | Settings icon (rbxassetid) |
-| HomeIcon | number | 9405923708 | Default tab icon (rbxassetid) |
-| IntroText | string | "SertaiVN Library" | Typewriter text |
-| IntroEnabled | boolean | true | Show loading |
-| SaveConfig | boolean | false | Auto-save configs |
-| ConfigFolder | string | Name | Config folder |
-| CloseCallback | function | (empty) | Called on close |
+## Creating a Window
+```lua
+local Window = SarXNightLib:MakeWindow({Name = "Title of the library", HidePremium = false, SaveConfig = true, ConfigFolder = "OrionTest"})
 
----
+--[[
+Name = <string> - The name of the UI.
+HidePremium = <bool> - Whether or not the user details shows Premium status or not.
+SaveConfig = <bool> - Toggles the config saving in the UI.
+ConfigFolder = <string> - The name of the folder where the configs are saved.
+IntroEnabled = <bool> - Whether or not to show the intro animation.
+IntroText = <string> - Text to show in the intro animation.
+IntroIcon = <string> - URL to the image you want to use in the intro animation.
+Icon = <string> - URL to the image you want displayed on the window.
+CloseCallback = <function> - Function to execute when the window is closed.
+]]
+```
 
-## 📑 Tabs
 
+
+## Creating a Tab
 ```lua
 local Tab = Window:MakeTab({
-    Name = "Main",
-    Icon = 9405923708  -- rbxassetid number (no emoji!)
+	Name = "Tab 1",
+	Icon = "rbxassetid://4483345998"
 })
+
+--[[
+Name = <string> - The name of the tab.
+Icon = <string> - The icon of the tab.
+PremiumOnly = <bool> - Makes the tab accessible to Sirus Premium users only.
+]]
 ```
-
-**No more `PremiumOnly` field.**
-
----
-
-## 🔍 Search Tabs
-
-Built-in at top of sidebar. Type to filter tabs by name. Empty = show all.
-
----
-
-## 🧩 Elements
-
-### Label
+## Creating a Section
 ```lua
-local lbl = Tab:AddLabel("Hello")
-lbl:Set("New text")
-```
-
-### Paragraph
-```lua
-local p = Tab:AddParagraph("Title", "Content")
-p:Set("New content")
-```
-
-### **Socials Paragraph (NEW!)**
-```lua
-Tab:AddSocialsParagraph({
-    Title = "Discord",
-    Content = "Join our community",
-    Image = 4384403532,
-    LinkName = "Copy Link",
-    URL = "https://discord.gg/sertaivn"
+local Section = Tab:AddSection({
+	Name = "Section"
 })
-```
-Click button to copy URL to clipboard.
 
-### Button
+--[[
+Name = <string> - The name of the section.
+]]
+```
+You can add elements to sections the same way you would add them to a tab normally.
+
+## Notifying the user
+```lua
+OrionLib:MakeNotification({
+	Name = "Title!",
+	Content = "Notification content... what will it say??",
+	Image = "rbxassetid://4483345998",
+	Time = 5
+})
+
+--[[
+Title = <string> - The title of the notification.
+Content = <string> - The content of the notification.
+Image = <string> - The icon of the notification.
+Time = <number> - The duration of the notfication.
+]]
+```
+
+
+
+## Creating a Button
 ```lua
 Tab:AddButton({
-    Name = "Click",
-    Icon = 3944703587,  -- rbxassetid
-    Callback = function() print("hi") end
+	Name = "Button!",
+	Callback = function()
+      		print("button pressed")
+  	end    
 })
+
+--[[
+Name = <string> - The name of the button.
+Callback = <function> - The function of the button.
+]]
 ```
 
-### Toggle
+
+## Creating a Checkbox toggle
 ```lua
 Tab:AddToggle({
-    Name = "Auto",
-    Default = false,
-    Color = Color3.fromRGB(130, 110, 230),
-    Callback = function(v) end,
-    Flag = "AutoFlag",
-    Save = true
+	Name = "This is a toggle!",
+	Default = false,
+	Callback = function(Value)
+		print(Value)
+	end    
 })
+
+--[[
+Name = <string> - The name of the toggle.
+Default = <bool> - The default value of the toggle.
+Callback = <function> - The function of the toggle.
+]]
 ```
 
-### Slider (Mobile + PC)
+### Changing the value of an existing Toggle
 ```lua
-Tab:AddSlider({
-    Name = "Speed",
-    Min = 0, Max = 100, Default = 50,
-    Increment = 1, ValueName = "studs/s",
-    Color = Color3.fromRGB(130, 110, 230),
-    Callback = function(v) end,
-    Flag = "Speed", Save = true
-})
+CoolToggle:Set(true)
 ```
 
-### **Dropdown (NEW: Scrollable, Max 3 visible)**
-```lua
-Tab:AddDropdown({
-    Name = "Mode",
-    Default = "Easy",
-    Options = {"Easy", "Medium", "Hard", "Insane", "Extreme", "Legendary"},
-    Callback = function(o) end,
-    Flag = "Mode", Save = true
-})
-```
-- Always shows **max 3 options at once**
-- More options? **Scroll inside the dropdown**
-- No more giant dropdowns blocking the UI!
 
-### Bind (Keybind)
-```lua
-Tab:AddBind({
-    Name = "Toggle",
-    Default = Enum.KeyCode.E,
-    Hold = false,
-    Callback = function() end,
-    Flag = "Key", Save = true
-})
-```
 
-### Textbox
-```lua
-Tab:AddTextbox({
-    Name = "Username",
-    Default = "",
-    TextDisappear = false,
-    Callback = function(t) end
-})
-```
-
-### Colorpicker
+## Creating a Color Picker
 ```lua
 Tab:AddColorpicker({
-    Name = "Color",
-    Default = Color3.fromRGB(255, 0, 0),
-    Callback = function(c) end,
-    Flag = "Color", Save = true
+	Name = "Colorpicker",
+	Default = Color3.fromRGB(255, 0, 0),
+	Callback = function(Value)
+		print(Value)
+	end	  
 })
+
+--[[
+Name = <string> - The name of the colorpicker.
+Default = <color3> - The default value of the colorpicker.
+Callback = <function> - The function of the colorpicker.
+]]
 ```
 
----
-
-## 🔔 Notifications (Image is rbxassetid number)
-
+### Setting the color picker's value
 ```lua
-SertaiVNLib:MakeNotification({
-    Name = "Title",
-    Content = "Message",
-    Image = 4384403532,  -- rbxassetid as number
-    Time = 5
-})
+ColorPicker:Set(Color3.fromRGB(255,255,255))
 ```
 
----
 
-## ⚙ Settings Panel
-
-Auto-included! Click the **Settings** button at the bottom of the sidebar.
-
-Contains:
-- **Profile card** — Avatar, DisplayName, @username, UserID
-- **Device** — Auto-detected (PC/Mobile)
-- **FPS** — Live updating
-- **Ping** — Live updating
-- **Discord Socials** — Copy invite link
-
----
-
-## 📱 Mobile Toggle (Draggable!)
-
-When UI is closed (✕):
-- Floating image button appears at top-left
-- **Draggable** — Move it anywhere
-- **Tap** to reopen UI
-- Uses `ToggleIcon` (rbxassetid)
-
----
-
-## 🎬 New Loading Screen
-
-1. Logo box scales in (Back easing)
-2. Logo image fades in (rbxassetid)
-3. Title text appears via typewriter effect
-4. "Initializing..." subtitle fades in
-5. Everything fades out → UI appears
-
-All icons are **rbxassetid based** — no external HTTP requests, no asset failures.
-
----
-
-## 💾 Config System
-
-Auto-loaded via `SertaiVNLib:Init()` if `SaveConfig = true`.
-
-Saved to: `<ConfigFolder>/<GameId>.txt`
-
-Only flagged elements with `Save = true` are persisted.
-
----
-
-## 🗑 Destroy
-
+## Creating a Slider
 ```lua
-SertaiVNLib:Destroy()
+Tab:AddSlider({
+	Name = "Slider",
+	Min = 0,
+	Max = 20,
+	Default = 5,
+	Color = Color3.fromRGB(255,255,255),
+	Increment = 1,
+	ValueName = "bananas",
+	Callback = function(Value)
+		print(Value)
+	end    
+})
+
+--[[
+Name = <string> - The name of the slider.
+Min = <number> - The minimal value of the slider.
+Max = <number> - The maxium value of the slider.
+Increment = <number> - How much the slider will change value when dragging.
+Default = <number> - The default value of the slider.
+ValueName = <string> - The text after the value number.
+Callback = <function> - The function of the slider.
+]]
 ```
 
----
-
-## 🐛 Fixed in v2.2
-
-| Bug | Status |
-|-----|--------|
-| Feather Icons HTTP fail | ✅ Removed (rbxassetid only) |
-| Dropdown too long | ✅ Max 3 + scroll |
-| No settings panel | ✅ Built-in |
-| No search for tabs | ✅ Added |
-| Emoji icons inconsistent | ✅ Replaced with rbxassetid |
-| Mobile toggle not draggable | ✅ Fixed |
-| No socials element | ✅ AddSocialsParagraph added |
-| `PremiumOnly` clutter | ✅ Removed |
-| `AddSection` length issues | ✅ Removed |
-
----
-
-## 📋 Full Example
-
+### Change Slider Value
 ```lua
-local SertaiVNLib = loadstring(game:HttpGet("YOUR_URL"))()
+Slider:Set(2)
+```
+Make sure you make your slider a variable (local CoolSlider = Tab:AddSlider...) for this to work.
 
-local Window = SertaiVNLib:MakeWindow({
-    Name = "SertaiVN Hub | v2.2",
-    Icon = 9405923708,
-    IntroIcon = 9405923708,
-    ToggleIcon = 9405923708,
-    CloseIcon = 99967063680607,
-    SettingsIcon = 2484550861,
-    HomeIcon = 9405923708,
-    IntroText = "SertaiVN Hub",
-    SaveConfig = true,
-    ConfigFolder = "SertaiVNHub"
-})
 
-local Main = Window:MakeTab({Name = "Main", Icon = 9405923708})
-
-Main:AddLabel("Welcome!")
-Main:AddParagraph("Info", "This is v2.2 with image icons and search.")
-
-Main:AddSocialsParagraph({
-    Title = "Discord Community",
-    Content = "Join SertaiVN HUB",
-    Image = 4384403532,
-    LinkName = "Copy Invite",
-    URL = "https://discord.gg/sertaivn"
-})
-
-Main:AddButton({Name = "Test", Callback = function()
-    SertaiVNLib:MakeNotification({Name = "Hi!", Content = "Works!", Image = 4384403532, Time = 4})
-end})
-
-Main:AddToggle({Name = "Auto Farm", Default = false, Callback = function(v) end, Flag = "Auto", Save = true})
-Main:AddSlider({Name = "Speed", Min = 16, Max = 200, Default = 16, Callback = function(v) end, Flag = "Speed", Save = true})
-
-local Visuals = Window:MakeTab({Name = "Visuals", Icon = 9405923708})
-
-Visuals:AddDropdown({
-    Name = "ESP Mode",
-    Default = "Box",
-    Options = {"Box", "Outline", "Name", "Health", "Distance", "Tracer", "Skeleton"},
-    Callback = function(o) end,
-    Flag = "ESPMode", Save = true
-})
-
-Visuals:AddColorpicker({Name = "ESP Color", Default = Color3.fromRGB(255,0,0), Callback = function(c) end, Flag = "ESPColor", Save = true})
-
-SertaiVNLib:Init()
+## Creating a Label
+```lua
+Tab:AddLabel("Label")
 ```
 
----
+### Changing the value of an existing label
+```lua
+CoolLabel:Set("Label New!")
+```
 
-## 📊 Stats
 
-- **Lines:** ~1980 ✅ (target: 1900-2000)
-- **Elements:** 10 (Label, Paragraph, SocialsParagraph, Button, Toggle, Slider, Dropdown, Bind, Textbox, Colorpicker)
-- **Removed:** PremiumOnly, AddSection, emoji icons
-- **Added:** Settings panel, search, socials paragraph, drag toggle, dropdown scroll
+## Creating a Paragraph
+```lua
+Tab:AddParagraph("Paragraph","Paragraph Content")
+```
 
----
+### Changing an existing paragraph
+```lua
+CoolParagraph:Set("Paragraph New!", "New Paragraph Content!")
+```
 
-**Made by SertaiVN © 2026**  
-Based on Orion (Discontinued) — Thanks Orion! 🙏
+
+## Creating an Adaptive Input
+```lua
+Tab:AddTextbox({
+	Name = "Textbox",
+	Default = "default box input",
+	TextDisappear = true,
+	Callback = function(Value)
+		print(Value)
+	end	  
+})
+
+--[[
+Name = <string> - The name of the textbox.
+Default = <string> - The default value of the textbox.
+TextDisappear = <bool> - Makes the text disappear in the textbox after losing focus.
+Callback = <function> - The function of the textbox.
+]]
+```
+
+
+## Creating a Keybind
+```lua
+Tab:AddBind({
+	Name = "Bind",
+	Default = Enum.KeyCode.E,
+	Hold = false,
+	Callback = function()
+		print("press")
+	end    
+})
+
+--[[
+Name = <string> - The name of the bind.
+Default = <keycode> - The default value of the bind.
+Hold = <bool> - Makes the bind work like: Holding the key > The bind returns true, Not holding the key > Bind returns false.
+Callback = <function> - The function of the bind.
+]]
+```
+
+### Chaning the value of a bind
+```lua
+Bind:Set(Enum.KeyCode.E)
+```
+
+
+## Creating a Dropdown menu
+```lua
+Tab:AddDropdown({
+	Name = "Dropdown",
+	Default = "1",
+	Options = {"1", "2"},
+	Callback = function(Value)
+		print(Value)
+	end    
+})
+
+--[[
+Name = <string> - The name of the dropdown.
+Default = <string> - The default value of the dropdown.
+Options = <table> - The options in the dropdown.
+Callback = <function> - The function of the dropdown.
+]]
+```
+
+### Adding a set of new Dropdown buttons to an existing menu
+```lua
+Dropdown:Refresh(List<table>,true)
+```
+
+The above boolean value "true" is whether or not the current buttons will be deleted.
+### Selecting a dropdown option
+```lua
+Dropdown:Set("dropdown option")
+```
+
+# Finishing your script (REQUIRED)
+The below function needs to be added at the end of your code.
+```lua
+OrionLib:Init()
+```
+
+### How flags work.
+The flags feature in the ui may be confusing for some people. It serves the purpose of being the ID of an element in the config file, and makes accessing the value of an element anywhere in the code possible.
+Below in an example of using flags.
+```lua
+Tab1:AddToggle({
+    Name = "Toggle",
+    Default = true,
+    Save = true,
+    Flag = "toggle"
+})
+
+print(OrionLib.Flags["toggle"].Value) -- prints the value of the toggle.
+```
+Flags only work with the toggle, slider, dropdown, bind, and colorpicker.
+
+### Making your interface work with configs.
+In order to make your interface use the configs function you first need to add the `SaveConfig` and `ConfigFolder` arguments to your window function. The explanation of these arguments in above.
+Then you need to add the `Flag` and `Save` values to every toggle, slider, dropdown, bind, and colorpicker you want to include in the config file.
+The `Flag = <string>` argument is the ID of an element in the config file.
+The `Save = <bool>` argument includes the element in the config file.
+Config files are made for every game the library is launched in.
+
+## Destroying the Interface
+```lua
+SarXNightLib:Destroy()
+```
