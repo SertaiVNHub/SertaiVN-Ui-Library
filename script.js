@@ -1,5 +1,5 @@
 // ============ COPY LOADER BUTTON ============
-const LOADER_CODE = `local SarXNight = loadstring(game:HttpGet("https://raw.githubusercontent.com/YOU/SarXNight/main/Source.luau"))()
+const LOADER_CODE = `local SarXNight = loadstring(game:HttpGet("https://raw.githubusercontent.com/Styuai6/SarXNight-Ui-Library/refs/heads/main/Source.luau"))()
 
 local Window = SarXNight:MakeWindow({
     Name = "My Hub",
