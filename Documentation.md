@@ -57,7 +57,7 @@ The user-facing loader is what people put in their executor. Host `Source.luau` 
 ```lua
 -- MyHub-Loader.lua
 local ok, lib = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/YOU/YOURREPO/main/Source.luau"))()
+    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Styuai6/SarXNight-Ui-Library/refs/heads/main/Source.luau"))()
 end)
 
 if not ok then
@@ -66,7 +66,7 @@ if not ok then
 end
 
 _G.SarXNight = lib
-loadstring(game:HttpGet("https://raw.githubusercontent.com/YOU/YOURREPO/main/MyHub.lua"))()
+loadstring(game:HttpGet("https://raw.githubusercontent.com/Styuai6/SarXNight-Ui-Library/refs/heads/main/Source.luau"))()
 ```
 
 ---
@@ -74,7 +74,7 @@ loadstring(game:HttpGet("https://raw.githubusercontent.com/YOU/YOURREPO/main/MyH
 ### Step 3 — Hub Skeleton
 
 ```lua
-local SarXNight = _G.SarXNight or loadstring(game:HttpGet("YOUR_URL/Source.luau"))()
+local SarXNight = _G.SarXNight or loadstring(game:HttpGet("https://raw.githubusercontent.com/Styuai6/SarXNight-Ui-Library/refs/heads/main/Source.luau"))()
 
 local Window = SarXNight:MakeWindow({
     Name        = "Nightfall Hub",
