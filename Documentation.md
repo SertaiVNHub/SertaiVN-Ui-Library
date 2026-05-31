@@ -1,355 +1,251 @@
-## Migration from v2.5 → v3
+# SarXNight Library — Documentation (v3.1)
 
-| v2.5 | v3 | Notes |
-|---|---|---|
-| `SertaiVN` (global) | `SarXNight` | Rename your variable when calling `loadstring(...)()` |
-| `SertaiVNLib` (internal) | `SarXNightLib` | Internal only — doesn't affect users |
-| `ScreenGui` name `"SertaiVN"` | `"SarXNight"` | Internal only |
-| `Icon` (MakeWindow) | **`InterfaceId`** | Old key still works as fallback |
-| `IntroIcon` (MakeWindow) | **`LoadingLogoId`** | Old key still works as fallback |
+A lightweight Roblox UI library for script hubs. This page covers the
+**v3.1 additions** plus the standard element reference.
 
-### Find & Replace Cheat Sheet
+> **v3.1 changelog**
+> - Removed version strings from the UI.
+> - `AddParagraph` now supports an optional **image**.
+> - New **`AddSocial`** element — a paragraph-style card with a copyable
+>   image/link and a copy button.
+> - `AddSlider` now has a **typed input box** (click and type an exact value).
+
+---
+
+## Getting Started
 
 ```lua
--- Before (v2.5)
-local SertaiVN = loadstring(game:HttpGet("..."))()
-local Window = SertaiVN:MakeWindow({
+local Lib = loadstring(game:HttpGet("YOUR_RAW_URL/source.luau"))()
+
+local Window = Lib:MakeWindow({
     Name = "My Hub",
-    Icon = "rbxassetid://123",
-    IntroIcon = "rbxassetid://123"
-})
-SertaiVN:MakeNotification({...})
-SertaiVN:Init()
-
--- After (v3)
-local SarXNight = loadstring(game:HttpGet("..."))()
-local Window = SarXNight:MakeWindow({
-    Name = "My Hub",
-    InterfaceId = "rbxassetid://123",
-    LoadingLogoId = "rbxassetid://123"
-})
-SarXNight:MakeNotification({...})
-SarXNight:Init()
-```
-
----
-
-## How To Create Your Own Script Hub With SarXNight
-
-This section walks you through building a complete, polished script hub from zero. By the end you'll have a multi-tab hub with auto-farm, player mods, ESP, teleports, and persistent config.
-
-### Step 1 — Prepare Your Assets
-
-Upload these to Roblox as decals/images and grab the asset IDs:
-
-1. **Hub logo** (used for `InterfaceId` and `LoadingLogoId`) — 256×256 PNG works great
-2. **Tab icons** — one per tab, 64×64 PNG
-3. *(Optional)* **Notification icon** — for branded notifications
-
-> Tip: keep icons monochrome (white on transparent) so the library can tint them with your accent color.
-
----
-
-### Step 2 — The Loader Script
-
-The user-facing loader is what people put in their executor. Host `Source.luau` on GitHub (raw URL) or Pastebin (raw URL):
-
-```lua
--- MyHub-Loader.lua
-local ok, lib = pcall(function()
-    return loadstring(game:HttpGet("https://raw.githubusercontent.com/Styuai6/SarXNight-Ui-Library/refs/heads/main/Source.luau"))()
-end)
-
-if not ok then
-    warn("Failed to load SarXNight: " .. tostring(lib))
-    return
-end
-
-_G.SarXNight = lib
-loadstring(game:HttpGet("https://raw.githubusercontent.com/Styuai6/SarXNight-Ui-Library/refs/heads/main/Source.luau"))()
-```
-
----
-
-### Step 3 — Hub Skeleton
-
-```lua
-local SarXNight = _G.SarXNight or loadstring(game:HttpGet("https://raw.githubusercontent.com/Styuai6/SarXNight-Ui-Library/refs/heads/main/Source.luau"))()
-
-local Window = SarXNight:MakeWindow({
-    Name        = "Nightfall Hub",
-    InterfaceId = "rbxassetid://YOUR_LOGO_ID",
-    LoadingLogoId = "rbxassetid://YOUR_LOGO_ID",
-    IntroText   = "Nightfall Hub",
+    ConfigFolder = "MyHub",
+    SaveConfig = true,
     IntroEnabled = true,
-    SaveConfig  = true,
-    ConfigFolder = "NightfallHub",
-    CloseCallback = function()
-        print("Hub hidden")
+    IntroText = "My Hub",
+    InterfaceId = "rbxassetid://11436111346",   -- window/mobile icon
+    LoadingLogoId = "rbxassetid://11436111346", -- loading screen logo
+    CloseCallback = function() print("closed") end
+})
+
+local Tab = Window:MakeTab({
+    Name = "Main",
+    Icon = "rbxassetid://10723345516"
+})
+
+local Section = Tab:AddSection({ Name = "Features" })
+
+Lib:Init() -- call after building UI (loads saved config)
+```
+
+---
+
+## Paragraph (with optional image) — *updated v3.1*
+
+```lua
+Tab:AddParagraph(
+    "Title text",
+    "This is the body content of the paragraph.",
+    "rbxassetid://11436111346" -- optional image (omit for text-only)
+)
+```
+
+**Arguments**
+
+| # | Name    | Type   | Description                          |
+|---|---------|--------|--------------------------------------|
+| 1 | Title   | string | Header text.                         |
+| 2 | Content | string | Body text (auto-wraps & resizes).    |
+| 3 | Image   | string | *(optional)* `rbxassetid://` image.  |
+
+**Returns** an object:
+
+```lua
+local p = Tab:AddParagraph("Info", "Old content")
+p:Set("New content")
+p:SetImage("rbxassetid://123456")
+```
+
+---
+
+## Social — *new v3.1*
+
+A paragraph-style card showing an image, a title, and a description, with a
+copy button that copies a link/text to the clipboard.
+
+```lua
+Section:AddSocial({
+    Name = "Discord",
+    Content = "Join our community server!",
+    Image = "rbxassetid://11436111346",   -- icon / logo
+    Copy = "https://discord.gg/example",  -- text copied to clipboard
+    Callback = function(copied)
+        print("Copied:", copied)
     end
 })
 ```
 
----
+**Config**
 
-### Step 4 — Adding Tabs
+| Key      | Type     | Default        | Description                              |
+|----------|----------|----------------|------------------------------------------|
+| Name     | string   | `"Social"`     | Title of the card.                       |
+| Content  | string   | `""`           | Description text.                        |
+| Image    | string   | Library logo   | `rbxassetid://` shown on the left.       |
+| Copy     | string   | `Content`      | Text/link copied when the button is hit. |
+| Callback | function | `function() end`| Called with the copied string.          |
+
+**Returns**
 
 ```lua
-local MainTab     = Window:MakeTab({ Name = "Main",      Icon = "rbxassetid://10723345516" })
-local PlayerTab   = Window:MakeTab({ Name = "Player",    Icon = "rbxassetid://10747384394" })
-local CombatTab   = Window:MakeTab({ Name = "Combat",    Icon = "rbxassetid://10734898355" })
-local TeleportTab = Window:MakeTab({ Name = "Teleports", Icon = "rbxassetid://10709790948" })
-local VisualTab   = Window:MakeTab({ Name = "Visuals",   Icon = "rbxassetid://10747373144" })
-local MiscTab     = Window:MakeTab({ Name = "Misc",      Icon = "rbxassetid://10734896206" })
-local SettingsTab = Window:MakeTab({ Name = "Settings",  Icon = "rbxassetid://10709751939" })
+local s = Section:AddSocial({ Name = "YouTube", Copy = "https://youtube.com/@me" })
+s:Set("New description")
+s:SetImage("rbxassetid://123")
+s:SetCopy("https://new-link.example")
 ```
 
+> Copying relies on the executor exposing `setclipboard`
+> (or `syn.write_clipboard` / `toclipboard`). If none is available, a
+> notification informs the user instead of erroring.
+
 ---
 
-### Step 5 — Main Tab (info & quick actions)
+## Slider (with input) — *updated v3.1*
+
+Drag the bar **or** click the number on the right and type an exact value.
 
 ```lua
-MainTab:AddParagraph("Welcome", "Thanks for using Nightfall Hub! Use the search bar to find tabs quickly.")
-
-local StatusLabel = MainTab:AddLabel("Status: Idle")
-
-MainTab:AddButton({
-    Name = "Rejoin Server",
-    Callback = function()
-        game:GetService("TeleportService"):Teleport(game.PlaceId, game.Players.LocalPlayer)
+Section:AddSlider({
+    Name = "Walk Speed",
+    Min = 16,
+    Max = 200,
+    Default = 16,
+    Increment = 1,
+    ValueName = "spd",
+    Flag = "WalkSpeed",
+    Save = true,
+    Callback = function(value)
+        game.Players.LocalPlayer.Character.Humanoid.WalkSpeed = value
     end
 })
+```
 
-MainTab:AddButton({
-    Name = "Copy Join Link",
-    Callback = function()
-        if setclipboard then
-            setclipboard("https://www.roblox.com/games/" .. game.PlaceId)
-            SarXNight:MakeNotification({ Name = "Copied", Content = "Game link copied!", Time = 3 })
-        end
-    end
-})
+**Config**
+
+| Key       | Type     | Default | Description                                  |
+|-----------|----------|---------|----------------------------------------------|
+| Name      | string   | `"Slider"` | Label.                                    |
+| Min       | number   | `0`     | Minimum value.                               |
+| Max       | number   | `100`   | Maximum value.                               |
+| Increment | number   | `1`     | Step size (rounding).                        |
+| Default   | number   | `50`    | Starting value.                              |
+| ValueName | string   | `""`    | Suffix shown after the number.               |
+| Flag      | string   | `nil`   | Config key for saving.                       |
+| Save      | bool     | `false` | Whether the value is saved to config.        |
+| Callback  | function | `noop`  | Fired with the numeric value on change.      |
+
+- **Typed input:** Click the value, type a number, press Enter. Invalid
+  input is rejected and the previous value restored. Out-of-range values are
+  clamped to `Min`/`Max`.
+
+**Returns**
+
+```lua
+local sl = Section:AddSlider({ ... })
+sl:Set(120)        -- programmatic set (clamps + rounds)
+print(sl.Value)    -- current value
 ```
 
 ---
 
-### Step 6 — Player Tab (movement mods)
+## Other Elements (unchanged)
 
+### Label
 ```lua
-local function getHum()
-    local c = game.Players.LocalPlayer.Character
-    return c and c:FindFirstChildOfClass("Humanoid")
-end
+local l = Tab:AddLabel("Hello")
+l:Set("Updated")
+```
 
-PlayerTab:AddSlider({
-    Name = "WalkSpeed", Min = 16, Max = 300, Default = 16, ValueName = "studs/s",
-    Flag = "walkspeed", Save = true,
-    Callback = function(v) local h = getHum(); if h then h.WalkSpeed = v end end
-})
+### Button
+```lua
+Tab:AddButton({ Name = "Click me", Callback = function() print("hi") end })
+```
 
-PlayerTab:AddSlider({
-    Name = "JumpPower", Min = 50, Max = 500, Default = 50, ValueName = "power",
-    Flag = "jumppower", Save = true,
-    Callback = function(v) local h = getHum(); if h then h.JumpPower = v end end
-})
-
-PlayerTab:AddToggle({
-    Name = "Infinite Jump", Default = false,
-    Flag = "infjump", Save = true,
-    Callback = function(state) _G.InfJump = state end
-})
-
-game:GetService("UserInputService").JumpRequest:Connect(function()
-    if _G.InfJump then local h = getHum(); if h then h:ChangeState("Jumping") end end
-end)
-
-PlayerTab:AddBind({
-    Name = "Toggle Noclip",
-    Default = Enum.KeyCode.N,
-    Flag = "noclipkey", Save = true,
-    Callback = function() _G.Noclip = not _G.Noclip end
+### Toggle
+```lua
+Tab:AddToggle({
+    Name = "God Mode",
+    Default = false,
+    Flag = "God",
+    Save = true,
+    Callback = function(state) print(state) end
 })
 ```
 
----
-
-### Step 7 — Combat Tab (toggles + dropdown)
-
+### Dropdown
 ```lua
-CombatTab:AddSection({ Name = "Auto Farm" })
-
-CombatTab:AddToggle({
-    Name = "Enable Auto Farm",
-    Default = false, Flag = "autofarm", Save = true,
-    Callback = function(state) _G.AutoFarm = state end
+local dd = Tab:AddDropdown({
+    Name = "Mode",
+    Options = {"A", "B", "C"},
+    Default = "A",
+    Flag = "Mode",
+    Save = true,
+    Callback = function(opt) print(opt) end
 })
+dd:Refresh({"X","Y","Z"}, true) -- replace options
+dd:Set("Y")
+```
 
-CombatTab:AddDropdown({
-    Name = "Target Mob",
-    Options = {"Bandit", "Goblin", "Wolf", "Troll", "Dragon", "Boss"},
-    Default = "Bandit",
-    Flag = "target", Save = true,
-    Callback = function(v) _G.Target = v end
-})
-
-CombatTab:AddSlider({
-    Name = "Attack Range", Min = 5, Max = 100, Default = 15, ValueName = "studs",
-    Flag = "range", Save = true,
-    Callback = function(v) _G.Range = v end
-})
-
-CombatTab:AddSection({ Name = "Auto Attack" })
-
-CombatTab:AddBind({
-    Name = "Toggle Auto Attack", Default = Enum.KeyCode.F,
-    Flag = "autoattack_key", Save = true,
-    Callback = function() _G.AutoAttack = not _G.AutoAttack end
+### Keybind
+```lua
+Tab:AddBind({
+    Name = "Toggle",
+    Default = Enum.KeyCode.E,
+    Hold = false,
+    Flag = "MyBind",
+    Save = true,
+    Callback = function() print("pressed") end
 })
 ```
 
----
-
-### Step 8 — Teleports Tab (dynamic dropdown)
-
+### Textbox
 ```lua
-local locations = {
-    ["Spawn"]   = CFrame.new(0, 5, 0),
-    ["Shop"]    = CFrame.new(100, 5, 50),
-    ["Dungeon"] = CFrame.new(-200, 50, 300),
-    ["Boss"]    = CFrame.new(500, 100, -100),
-}
-
-local names = {}
-for k in pairs(locations) do table.insert(names, k) end
-
-TeleportTab:AddDropdown({
-    Name = "Location",
-    Options = names,
-    Default = names[1],
-    Flag = "tp_loc", Save = true,
-    Callback = function(v) _G.TeleportTarget = v end
-})
-
-TeleportTab:AddButton({
-    Name = "Teleport",
-    Callback = function()
-        local target = _G.TeleportTarget
-        local c = game.Players.LocalPlayer.Character
-        if c and locations[target] then
-            c:PivotTo(locations[target])
-            SarXNight:MakeNotification({ Name = "Teleport", Content = "Teleported to " .. target, Time = 3 })
-        end
-    end
-})
-
-TeleportTab:AddSection({ Name = "Players" })
-
-local playerDropdown = TeleportTab:AddDropdown({
-    Name = "Player",
-    Options = {},
+Tab:AddTextbox({
+    Name = "Username",
     Default = "",
-    Callback = function() end
-})
-
-TeleportTab:AddButton({
-    Name = "Refresh Players",
-    Callback = function()
-        local list = {}
-        for _, p in ipairs(game.Players:GetPlayers()) do
-            if p ~= game.Players.LocalPlayer then table.insert(list, p.Name) end
-        end
-        playerDropdown:Refresh(list, true)
-    end
+    TextDisappear = false,
+    Callback = function(text) print(text) end
 })
 ```
 
----
-
-### Step 9 — Visuals Tab (colorpickers)
-
+### Colorpicker
 ```lua
-VisualTab:AddToggle({
-    Name = "ESP Boxes", Default = false,
-    Flag = "esp_box", Save = true,
-    Callback = function(s) _G.ESPBox = s end
-})
-
-VisualTab:AddColorpicker({
-    Name = "ESP Color",
-    Default = Color3.fromRGB(255, 0, 0),
-    Flag = "esp_color", Save = true,
-    Callback = function(c) _G.ESPColor = c end
-})
-
-VisualTab:AddToggle({
-    Name = "Fullbright", Default = false,
-    Flag = "fullbright", Save = true,
-    Callback = function(s)
-        if s then
-            game.Lighting.Brightness = 5; game.Lighting.FogEnd = 1e6
-        else
-            game.Lighting.Brightness = 1; game.Lighting.FogEnd = 1e4
-        end
-    end
+Tab:AddColorpicker({
+    Name = "Color",
+    Default = Color3.fromRGB(255,0,0),
+    Flag = "Col",
+    Save = true,
+    Callback = function(color) print(color) end
 })
 ```
 
 ---
 
-### Step 10 — Settings Tab + Init
-
+## Notifications
 ```lua
-SettingsTab:AddParagraph("Hub Info", "Nightfall Hub v1.0 — built on SarXNight v3.")
-
-SettingsTab:AddBind({
-    Name = "Toggle UI", Default = Enum.KeyCode.RightShift,
-    Flag = "ui_toggle", Save = true,
-    Callback = function() end
-})
-
-SettingsTab:AddButton({
-    Name = "Unload Hub",
-    Callback = function()
-        SarXNight:MakeNotification({ Name = "Unloading", Content = "Bye!", Time = 2 })
-        wait(2); SarXNight:Destroy()
-    end
-})
-
--- Always last — loads saved values for every flagged element
-SarXNight:Init()
-
-SarXNight:MakeNotification({
-    Name = "Nightfall Hub",
-    Content = "Loaded successfully! Press RightShift to hide.",
-    Time = 6
+Lib:MakeNotification({
+    Name = "Title",
+    Content = "Message body",
+    Image = "rbxassetid://10709751939",
+    Time = 5
 })
 ```
 
----
+## Hiding / Showing
+- **PC:** Press `RightShift` to reopen after closing.
+- **Mobile:** Tap the floating draggable icon.
 
-### Best Practices
-
-- **Always set `Flag` + `Save = true`** on persistent settings.
-- **Call `SarXNight:Init()` last**, after all elements are created.
-- **Wrap risky callbacks in `pcall`** to avoid breaking your script.
-- **Use sections** to group related controls — they read much cleaner.
-- **Keep dropdowns short** or use `:Refresh()` to repopulate dynamically (max 3 visible, the rest scroll).
-- **Don't hardcode colors** — use `Theme.Accent` for branded highlights.
-
----
-
-## Troubleshooting
-
-| Problem | Fix |
-|---|---|
-| Library doesn't show up | Make sure the raw URL is correct and the executor supports `loadstring + HttpGet` |
-| Icons are blank | Replace placeholder `rbxassetid://` with your own uploaded IDs |
-| Mobile toggle vanishes | It only appears after the X button is clicked. Drag it where you want it. |
-| Config not saving | Set `SaveConfig = true` on the window AND `Save = true` + a unique `Flag` on each element |
-| Old `SertaiVN` script breaks | Replace `SertaiVN` → `SarXNight` globally, see migration table above |
-
----
-
-## License
-
-Free to use, modify, and redistribute. Credit appreciated but not required.
+## Cleanup
+```lua
+Lib:Destroy()
+```
